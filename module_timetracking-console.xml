@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_timetracking-console" default="compile.module.timetracking-console">
+  <dirname property="module.timetracking-console.basedir" file="${ant.file.module_timetracking-console}"/>
+  
+  <property name="module.jdk.home.timetracking-console" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.timetracking-console" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.timetracking-console" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.timetracking-console" value="-encoding UTF-8 -source 1.7 -target 1.7 ${compiler.args}"/>
+  
+  <property name="timetracking-console.output.dir" value="${module.timetracking-console.basedir}/target/classes"/>
+  <property name="timetracking-console.testoutput.dir" value="${module.timetracking-console.basedir}/target/test-classes"/>
+  
+  <path id="timetracking-console.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="timetracking-console.module.production.classpath">
+    <path refid="${module.jdk.classpath.timetracking-console}"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml:3.9.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.9.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.5.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml-schemas:3.9.classpath"/>
+    <path refid="library.maven:_org.apache.xmlbeans:xmlbeans:2.3.0.classpath"/>
+    <path refid="library.maven:_stax:stax-api:1.0.1.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.0.b2.classpath"/>
+  </path>
+  
+  <path id="timetracking-console.runtime.production.module.classpath">
+    <pathelement location="${timetracking-console.output.dir}"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml:3.9.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.9.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.5.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml-schemas:3.9.classpath"/>
+    <path refid="library.maven:_org.apache.xmlbeans:xmlbeans:2.3.0.classpath"/>
+    <path refid="library.maven:_stax:stax-api:1.0.1.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.0.b2.classpath"/>
+  </path>
+  
+  <path id="timetracking-console.module.classpath">
+    <path refid="${module.jdk.classpath.timetracking-console}"/>
+    <pathelement location="${timetracking-console.output.dir}"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml:3.9.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.9.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.5.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml-schemas:3.9.classpath"/>
+    <path refid="library.maven:_org.apache.xmlbeans:xmlbeans:2.3.0.classpath"/>
+    <path refid="library.maven:_stax:stax-api:1.0.1.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.0.b2.classpath"/>
+  </path>
+  
+  <path id="timetracking-console.runtime.module.classpath">
+    <pathelement location="${timetracking-console.testoutput.dir}"/>
+    <pathelement location="${timetracking-console.output.dir}"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml:3.9.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.9.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.5.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml-schemas:3.9.classpath"/>
+    <path refid="library.maven:_org.apache.xmlbeans:xmlbeans:2.3.0.classpath"/>
+    <path refid="library.maven:_stax:stax-api:1.0.1.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.0.b2.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.timetracking-console">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.timetracking-console">
+    <patternset refid="excluded.from.module.timetracking-console"/>
+  </patternset>
+  
+  <path id="timetracking-console.module.sourcepath">
+    <dirset dir="${module.timetracking-console.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.timetracking-console" depends="compile.module.timetracking-console.production,compile.module.timetracking-console.tests" description="Compile module timetracking-console"/>
+  
+  <target name="compile.module.timetracking-console.production" description="Compile module timetracking-console; production classes">
+    <mkdir dir="${timetracking-console.output.dir}"/>
+    <javac destdir="${timetracking-console.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.timetracking-console}/javac">
+      <compilerarg line="${compiler.args.timetracking-console}"/>
+      <bootclasspath refid="timetracking-console.module.bootclasspath"/>
+      <classpath refid="timetracking-console.module.production.classpath"/>
+      <src refid="timetracking-console.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.timetracking-console"/>
+    </javac>
+    
+    <copy todir="${timetracking-console.output.dir}">
+      <fileset dir="${module.timetracking-console.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.timetracking-console.tests" depends="compile.module.timetracking-console.production" description="compile module timetracking-console; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.timetracking-console" description="cleanup module">
+    <delete dir="${timetracking-console.output.dir}"/>
+    <delete dir="${timetracking-console.testoutput.dir}"/>
+  </target>
+</project>
