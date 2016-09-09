@@ -3,6 +3,7 @@ package com.mayobirne.service.impl;
 import com.mayobirne.dto.CellStylesDTO;
 import com.mayobirne.dto.InterflexDTO;
 import com.mayobirne.dto.TimesDTO;
+import com.mayobirne.service.InterflexService;
 import com.mayobirne.service.TimesService;
 import com.mayobirne.service.impl.helper.CellStyleHelper;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -16,7 +17,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by christian on 03.09.16.
@@ -99,8 +102,16 @@ public class TimesServiceImpl implements TimesService {
         Integer day = interflexDTO.getDateInteger();
         Calendar dateCalendar = (Calendar) calendar.clone();
         dateCalendar.set(Calendar.DAY_OF_MONTH, day);
+        dateCalendar.set(Calendar.HOUR_OF_DAY, 8);
 
         timesDTO.setDate(dateCalendar);
+
+        // Let's hope this works during wintertime too
+        if (isDaylightTime(dateCalendar)) {
+            interflexDTO.getStartTime().setTime(interflexDTO.getStartTime().getTime() - InterflexService.ONE_HOUR_IN_MILLISECONDS);
+            interflexDTO.getEndTime().setTime(interflexDTO.getEndTime().getTime() - InterflexService.ONE_HOUR_IN_MILLISECONDS);
+        }
+
         timesDTO.setStartTime(interflexDTO.getStartTime());
         timesDTO.setEndTime(interflexDTO.getEndTime());
 
@@ -112,4 +123,7 @@ public class TimesServiceImpl implements TimesService {
         return timesDTO;
     }
 
+    private boolean isDaylightTime(Calendar calendar) {
+        return TimeZone.getDefault().inDaylightTime(calendar.getTime());
+    }
 }
