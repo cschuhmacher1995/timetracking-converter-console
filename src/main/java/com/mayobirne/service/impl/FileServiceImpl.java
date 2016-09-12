@@ -1,5 +1,6 @@
 package com.mayobirne.service.impl;
 
+import com.mayobirne.dto.ArgsDTO;
 import com.mayobirne.service.FileService;
 
 import java.io.File;
@@ -13,9 +14,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by christian on 05.09.16.
@@ -25,7 +24,7 @@ public class FileServiceImpl implements FileService {
     private static final String FILE_NAME = "timesheet";
 
     @Override
-    public File generateNewExcelFile(Date date) throws URISyntaxException, IOException {
+    public File generateNewExcelFile(ArgsDTO argsDTO) throws URISyntaxException, IOException {
         // Times-Template from resources
         URL templateUri = getClass().getResource("/template.xlsx");
 
@@ -37,19 +36,70 @@ public class FileServiceImpl implements FileService {
         FileSystems.newFileSystem(templateUri.toURI(), env);
         Path templatePath = Paths.get(templateUri.toURI());
 
-        // Get Home-Directory
-        String userHomeFolder = System.getProperty("user.home");
-
-        // Get the Month as a String
-        DateFormat dateFormat = new SimpleDateFormat("MMMM");
-        String monthString = dateFormat.format(date);
-
         // Create filename in Home-Directory: timesheet_'month'.xlsx
-        String fileName = userHomeFolder + "/" + FILE_NAME + "_" + monthString + ".xlsx";
+        String fileName = getSimpleFileNameForDate(argsDTO);
+
+        // Update the filename if needed
+        if (argsDTO.isCreateNewFileIfExists()) {
+            fileName = updateFileNameIfExists(fileName);
+        }
 
         // Copy template to Home-Directory and create the new File
         // If a file with the same name exists it will get overwritten
         Files.copy(templatePath, Paths.get(fileName), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
         return new File(fileName);
+    }
+
+    @Override
+    public List<File> getExistingConvertedFiles(ArgsDTO argsDTO) {
+        List<File> fileList = new ArrayList<>();
+
+        String fileName = getSimpleFileNameForDate(argsDTO);
+        File file = new File(fileName);
+
+        while (file.exists()) {
+            // Add existing File to List
+            fileList.add(file);
+
+            if (fileName.contains("_" + fileList.size() + ".")) {
+                // If File with number fileList.size() exists, increase number of next File to check by 1
+                fileName = fileName.replace(fileList.size() + ".", (fileList.size()+1) + ".");
+            } else {
+                // If File has no number it's the SimpleName, next one to check has _1
+                fileName = fileName.replace(".", "_1.");
+            }
+            // Next File to check
+            file = new File(fileName);
+        }
+
+        return fileList;
+    }
+
+
+    private String getSimpleFileNameForDate(ArgsDTO argsDTO) {
+        // Get Home-Directory
+        String directory = argsDTO.getOutputDirectory();
+        if (directory == null) directory = System.getProperty("user.home");
+
+        // Get the Month as a String
+        DateFormat dateFormat = new SimpleDateFormat("MMMMyyyy");
+        String monthString = dateFormat.format(argsDTO.getMonthAndYear().getTime());
+
+        // Create filename in Home-Directory: timesheet_'month''year'.xlsx
+        return directory + "/" + FILE_NAME + "_" + monthString + ".xlsx";
+    }
+
+    private String updateFileNameIfExists(String fileName) {
+        Integer index = 0;
+        while (new File(fileName).exists()) {
+            if (fileName.contains("_" + index + ".")) {
+                index++;
+                fileName = fileName.replace((index-1) + ".", index + ".");
+            } else {
+                index++;
+                fileName = fileName.replace(".", "_" + index + ".");
+            }
+        }
+        return fileName;
     }
 }

@@ -95,4 +95,41 @@ public class TimesDTO {
 
         return hour + ":" + minute + ":00";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+
+        // Checking Date and Starttime should be enough
+
+        TimesDTO otherDTO = (TimesDTO) obj;
+
+        // Check Date
+        Integer thisDateOfMonth = date.get(Calendar.DAY_OF_MONTH);
+        Integer otherDateOfMonth = otherDTO.getDate().get(Calendar.DAY_OF_MONTH);
+        if (!thisDateOfMonth.equals(otherDateOfMonth)) {
+            return false;
+        }
+
+        // Check Starttime
+        Calendar thisStartTimeCalendar = Calendar.getInstance();
+        thisStartTimeCalendar.setTime(startTime);
+        Integer thisStartMinute = thisStartTimeCalendar.get(Calendar.MINUTE);
+        Integer thisStartHour = thisStartTimeCalendar.get(Calendar.HOUR_OF_DAY);
+
+        Calendar otherStartTimeCalendar = Calendar.getInstance();
+        otherStartTimeCalendar.setTime(otherDTO.getStartTime());
+        Integer otherStartMinute = otherStartTimeCalendar.get(Calendar.MINUTE);
+        Integer otherStartHour = otherStartTimeCalendar.get(Calendar.HOUR_OF_DAY);
+
+        if (!thisStartMinute.equals(otherStartMinute) ||
+                !thisStartHour.equals(otherStartHour)) {
+            return false;
+        }
+
+        // Equals succeeded
+        return true;
+    }
 }

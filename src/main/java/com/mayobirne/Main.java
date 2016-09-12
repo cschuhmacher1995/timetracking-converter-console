@@ -1,5 +1,6 @@
 package com.mayobirne;
 
+import com.mayobirne.dto.ArgsDTO;
 import com.mayobirne.dto.InterflexDTO;
 import com.mayobirne.dto.TimesDTO;
 import com.mayobirne.service.ArgsService;
@@ -12,6 +13,7 @@ import com.mayobirne.service.impl.InterflexServiceImpl;
 import com.mayobirne.service.impl.TimesServiceImpl;
 import com.mayobirne.exceptions.IORuntimeException;
 import com.mayobirne.exceptions.InvalidInputException;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.awt.*;
@@ -19,65 +21,72 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 public class Main {
 
     /**
      * @param args:
-     *      1) .xlsx or .csv File from Interflex,
-     *      2) Month and year with pattern "MM.yyyy"
+     *            -help: Tutorial
+     *            -input=[Input-File] - required
+     *            -time=[MM.yyyy] - required
+     *            -output=[Output-Directory] - optional, Default = user.home
+     *            -overwrite=[y/n] - optional, Default = y
      */
     public static void main(String[] args) {
         List<String> argsList = Arrays.asList(args);
 
         ArgsService argsService = new ArgsServiceImpl();
 
-        File excelFile;
-        Calendar monthAndYear;
+        ArgsDTO argsDTO;
         try {
-            // Validate the amount of arguments
-            argsService.validateArgs(argsList);
-
-            // Validate and find the Excel-File
-            excelFile = argsService.findFileFromArgs(argsList);
-
-            // Validate the pattern for Month/Year
-            monthAndYear = argsService.getMonthAndYear(argsList);
-
+            // Get and validate the Input-Parameters
+            argsDTO = argsService.setArgsDTO(argsList);
+            argsService.validateArgs(argsDTO);
         } catch (InvalidInputException e) {
             System.out.println("Error: " + e.getMessage());
-            System.out.println("Use pattern: [Interflex-File as xlsx/csv] [MM.yyyy]");
+            System.out.println("Start Program with '" + ArgsService.HELP + "' for Help");
             return;
         }
 
-        turnInterflexIntoTimes(excelFile, monthAndYear);
+        if (argsDTO.isOpenHelp()) {
+            argsService.showHelpText();
+            return;
+        }
+
+        turnInterflexIntoTimes(argsDTO);
     }
 
-    /**
-     * Creates a new Workbook with converted Data compatible with Times-Upload
-     *
-     * @param file Excel-File from Interflex
-     * @param monthAndYearCalendar to set the Month in the filename
-     */
-    private static void turnInterflexIntoTimes(File file, Calendar monthAndYearCalendar) {
+    private static void turnInterflexIntoTimes(ArgsDTO argsDTO) {
         InterflexService interflexService = new InterflexServiceImpl();
+        TimesService timesService = new TimesServiceImpl();
+        FileService fileService = new FileServiceImpl();
 
         // Extract the Data from the Input-File
-        List<InterflexDTO> interflexList = interflexService.getInterflexListFromFile(file);
+        List<InterflexDTO> interflexList = interflexService.getInterflexListFromFile(argsDTO.getInputFile());
         System.out.println("Found " + interflexList.size() + " Items");
 
-        TimesService timesService = new TimesServiceImpl();
-
         // Convert the extracted Data into a List of TimesDTOs
-        List<TimesDTO> timesList = timesService.createTimesListFromInterflex(interflexList, monthAndYearCalendar);
+        List<TimesDTO> timesList = timesService.createTimesListFromInterflex(interflexList, argsDTO.getMonthAndYear());
+
+        // if #isCreateNewFileIfExists is active, get all old Files and extract their TimesDTOs
+        if (argsDTO.isCreateNewFileIfExists()) {
+            List<File> existingFiles = fileService.getExistingConvertedFiles(argsDTO);
+            List<TimesDTO> toRemove = new ArrayList<>();
+
+            for (File file : existingFiles) {
+                List<TimesDTO> tempListToRemove = timesService.createTimesListFromFile(file);
+                toRemove.addAll(tempListToRemove);
+            }
+
+            System.out.println("Found " + toRemove.size() + " Times-Items to remove.");
+            timesList = new ArrayList<>(CollectionUtils.removeAll(timesList, toRemove));
+        }
 
         try {
             // Generate the new Excel-File for the Output
-            File newFile = generateNewExcelFile(monthAndYearCalendar.getTime());
+            File newFile = fileService.generateNewExcelFile(argsDTO);
             XSSFWorkbook workbook = timesService.createWorkbookForTimesList(timesList, newFile);
 
             // Save the new Excel-File in the Home-Directory
@@ -93,11 +102,5 @@ public class Main {
         } catch (IOException | URISyntaxException e) {
             throw new IORuntimeException("I'm sorry there was an error creating the new Excel-File :(", e);
         }
-    }
-
-    // Initializes the FileService and lets it generate the new Excel-File
-    private static File generateNewExcelFile(Date date) throws IOException, URISyntaxException {
-        FileService fileService = new FileServiceImpl();
-        return fileService.generateNewExcelFile(date);
     }
 }

@@ -29,6 +29,8 @@ public interface TimesService {
      */
     List<TimesDTO> createTimesListFromInterflex(List<InterflexDTO> interflexList, Calendar monthAndYearCalendar);
 
+    List<TimesDTO> createTimesListFromFile(File file);
+
     /**
      * Inserts the timesList into the Excel-File
      *

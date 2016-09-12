@@ -1,9 +1,8 @@
 package com.mayobirne.service;
 
+import com.mayobirne.dto.ArgsDTO;
 import com.mayobirne.exceptions.InvalidInputException;
 
-import java.io.File;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -11,29 +10,33 @@ import java.util.List;
  */
 public interface ArgsService {
 
-    /**
-     * Validates the amount of Arguments
-     *
-     * @param args as List
-     * @throws InvalidInputException to show custom Messages the Argument-Size is wrong
-     */
-    void validateArgs(List<String> args) throws InvalidInputException;
+    // Help
+    String HELP = "-help";
+
+    // Required
+    String INTERFLEX_FILE = "-input=";
+    String MONTH_YEAR = "-time=";
+
+    // Optional
+    String OUTPUT_DIRECTORY = "-output=";
+    String CREATE_NEW_FILE_IF_EXISTS = "-overwrite=";
+
 
     /**
-     * Validates the input-arguments, finds and returns the File from {@param args} if the validation succeeds.
+     * Validates Arguments
+     *
+     * @throws InvalidInputException to show custom Messages for missing arguments
+     */
+    void validateArgs(ArgsDTO args) throws InvalidInputException;
+
+    /**
+     * Extracts an DTO from the Input-Parameters
      *
      * @param args Input from startup
-     * @return the found Excel-File
+     * @return ArgsDTO with all Input-Parameters
      * @throws InvalidInputException to show custom Messages if the inputdata is wrong
      */
-    File findFileFromArgs(List<String> args) throws InvalidInputException;
+    ArgsDTO setArgsDTO(List<String> args) throws InvalidInputException;
 
-    /**
-     * Validates the Pattern from the Month/Year Input and returns it as Calendar
-     *
-     * @param args as List
-     * @return Calendar with Month and Year set
-     * @throws InvalidInputException to show custom Messages if the inputdata is wrong
-     */
-    Calendar getMonthAndYear(List<String> args) throws InvalidInputException;
+    void showHelpText();
 }

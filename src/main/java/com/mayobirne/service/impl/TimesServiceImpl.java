@@ -3,6 +3,7 @@ package com.mayobirne.service.impl;
 import com.mayobirne.dto.CellStylesDTO;
 import com.mayobirne.dto.InterflexDTO;
 import com.mayobirne.dto.TimesDTO;
+import com.mayobirne.exceptions.IORuntimeException;
 import com.mayobirne.service.InterflexService;
 import com.mayobirne.service.TimesService;
 import com.mayobirne.service.impl.helper.CellStyleHelper;
@@ -59,6 +60,57 @@ public class TimesServiceImpl implements TimesService {
 
         System.out.println("Finished generating the Excel sheet, are you proud of me?");
         return workbook;
+    }
+
+    @Override
+    public List<TimesDTO> createTimesListFromFile(File file) {
+        XSSFWorkbook wb;
+        try {
+            wb = new XSSFWorkbook(new FileInputStream(file));
+        } catch (IOException e) {
+            throw new IORuntimeException("Some bullshit happened creating the FileInputStream.", e);
+        }
+
+        XSSFSheet sheet = wb.getSheetAt(0);
+        Integer rowSize = sheet.getPhysicalNumberOfRows();
+
+        return createTimesList(sheet, rowSize);
+    }
+
+
+    private List<TimesDTO> createTimesList(XSSFSheet sheet, Integer rowSize) {
+        List<TimesDTO> timesList = new ArrayList<>();
+
+        for (int i = 1; i < rowSize; i++) {
+            XSSFRow row = sheet.getRow(i);
+
+            if (row.getCell(0) == null) {
+                continue;
+            }
+
+            TimesDTO dto = new TimesDTO();
+            timesList.add(dto);
+
+            dto.setDate(getCalendarValue(row, CellStyleHelper.DATE_CELL));
+            dto.setStartTime(getDateValue(row, CellStyleHelper.START_TIME_CELL));
+            dto.setEndTime(getDateValue(row, CellStyleHelper.END_TIME_CELL));
+        }
+
+        return timesList;
+    }
+
+    private Calendar getCalendarValue(XSSFRow row, int columnIndex) {
+        XSSFCell dateCell = row.getCell(columnIndex);
+        Date date = dateCell.getDateCellValue();
+        Calendar dateCalendar = Calendar.getInstance();
+        dateCalendar.setTime(date);
+
+        return dateCalendar;
+    }
+
+    private Date getDateValue(XSSFRow row, int columnIndex) {
+        XSSFCell dateCell = row.getCell(columnIndex);
+        return dateCell.getDateCellValue();
     }
 
 
