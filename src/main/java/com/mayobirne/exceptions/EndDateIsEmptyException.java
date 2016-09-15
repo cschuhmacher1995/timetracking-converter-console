@@ -7,7 +7,7 @@ package com.mayobirne.exceptions;
  */
 public class EndDateIsEmptyException extends Exception {
 
-    private Integer rowNumber;
+    private final Integer rowNumber;
 
     public EndDateIsEmptyException(Integer rowNumber) {
         super();

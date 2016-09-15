@@ -7,12 +7,12 @@ import org.apache.poi.ss.usermodel.CellStyle;
  */
 public class CellStylesDTO {
 
-    private CellStyle dateCellStyle;
-    private CellStyle startTimeCellStyle;
-    private CellStyle endTimeCellStyle;
-    private CellStyle projectNrCellStyle;
-    private CellStyle categoryCellStyle;
-    private CellStyle descriptionCellStyle;
+    private final CellStyle dateCellStyle;
+    private final CellStyle startTimeCellStyle;
+    private final CellStyle endTimeCellStyle;
+    private final CellStyle projectNrCellStyle;
+    private final CellStyle categoryCellStyle;
+    private final CellStyle descriptionCellStyle;
 
     public CellStylesDTO(CellStyle dateCellStyle, CellStyle startTimeCellStyle, CellStyle endTimeCellStyle,
                          CellStyle projectNrCellStyle, CellStyle categoryCellStyle, CellStyle descriptionCellStyle) {
