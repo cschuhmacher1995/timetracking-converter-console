@@ -85,7 +85,7 @@ public class InterflexServiceImpl implements InterflexService {
     }
 
     private void setDate(InterflexDTO dto, XSSFRow row, String lastSetDay) {
-        String rowValue = row.getCell(0).getStringCellValue();;
+        String rowValue = row.getCell(0).getStringCellValue();
         dto.setDate(rowValue == null || rowValue.isEmpty() ? lastSetDay : rowValue);
     }
 

@@ -83,12 +83,15 @@ public class TimesDTO {
             return "";
         }
 
-        String hour = String.valueOf(date.getHours());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
         if (hour.length() == 1)  {
             hour = "0" + hour;
         }
 
-        String minute = String.valueOf(date.getMinutes());
+        String minute = String.valueOf(calendar.get(Calendar.MINUTE));
         if (minute.length() == 1) {
             minute = "0" + minute;
         }
