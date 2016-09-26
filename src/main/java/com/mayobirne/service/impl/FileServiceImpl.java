@@ -61,9 +61,9 @@ public class FileServiceImpl implements FileService {
             // Add existing File to List
             fileList.add(file);
 
-            if (fileName.contains("_" + fileList.size() + ".")) {
+            if (fileName.contains("_" + (fileList.size()-1) + ".")) {
                 // If File with number fileList.size() exists, increase number of next File to check by 1
-                fileName = fileName.replace(fileList.size() + ".", (fileList.size()+1) + ".");
+                fileName = fileName.replace((fileList.size()-1) + ".", (fileList.size()) + ".");
             } else {
                 // If File has no number it's the SimpleName, next one to check has _1
                 fileName = fileName.replace(".", "_1.");
