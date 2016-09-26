@@ -84,6 +84,11 @@ public class Main {
             timesList = new ArrayList<>(CollectionUtils.removeAll(timesList, toRemove));
         }
 
+        if (CollectionUtils.isEmpty(timesList)) {
+            System.out.println("Sadly there is nothing left to convert.");
+            return;
+        }
+
         try {
             // Generate the new Excel-File for the Output
             File newFile = fileService.generateNewExcelFile(argsDTO);
