@@ -8,6 +8,7 @@ import com.mayobirne.service.InterflexService;
 import com.mayobirne.service.TimesService;
 import com.mayobirne.service.impl.helper.CellStyleHelper;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -84,7 +85,7 @@ public class TimesServiceImpl implements TimesService {
         for (int i = 1; i < rowSize; i++) {
             XSSFRow row = sheet.getRow(i);
 
-            if (row.getCell(0) == null) {
+            if (row.getCell(0) == null || row.getCell(0).getCellType() == Cell.CELL_TYPE_BLANK) {
                 continue;
             }
 
