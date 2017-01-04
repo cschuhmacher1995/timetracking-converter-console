@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
+ * Implementation of {@link ArgsService}
  * Created by christian on 26.08.16.
  */
 public class ArgsServiceImpl implements ArgsService {

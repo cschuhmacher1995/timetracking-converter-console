@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
+ * Data needed for generating the Output-File.
+ *
  * Created by christian on 03.09.16.
  */
 public class TimesDTO {

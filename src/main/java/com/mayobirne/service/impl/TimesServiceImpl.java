@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 /**
+ * Implementation of {@link TimesService}
  * Created by christian on 03.09.16.
  */
 public class TimesServiceImpl implements TimesService {

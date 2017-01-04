@@ -1,9 +1,9 @@
 package com.mayobirne.exceptions;
 
 /**
- * Created by christian on 03.09.16.
- *
  * To show a Warning if the End-Time is not set
+ *
+ * Created by christian on 26.08.16.
  */
 public class EndDateIsEmptyException extends Exception {
 

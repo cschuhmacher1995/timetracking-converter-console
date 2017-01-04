@@ -1,9 +1,9 @@
 package com.mayobirne.exceptions;
 
 /**
- * Created by christian on 05.09.16.
- *
  * Used to be able to throw IOExceptions as RuntimeExceptions
+ *
+ * Created by christian on 05.09.16.
  */
 public class IORuntimeException extends RuntimeException {
 

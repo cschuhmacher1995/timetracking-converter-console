@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
+ * Implementation of {@link FileService}
  * Created by christian on 05.09.16.
  */
 public class FileServiceImpl implements FileService {

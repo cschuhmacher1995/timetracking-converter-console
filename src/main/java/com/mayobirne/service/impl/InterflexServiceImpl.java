@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ * Implementation of {@link InterflexService}
  * Created by christian on 03.09.16.
  */
 public class InterflexServiceImpl implements InterflexService {
@@ -107,10 +108,25 @@ public class InterflexServiceImpl implements InterflexService {
         }
 
         Long timeToAdd = diff - SIX_HOURS_IN_MILLISECONDS;
+
+        // min. duration is 5 minutes per entry
+        boolean moveOneHour = timeToAdd < FIVE_MIN_IN_MILLISECONDS;
+
         System.out.println("Worked more then 6 hours without break on " + dto.getDate() + ". But don't worry, I got this.");
 
-        // New end time for first DTO ist 6 hours after startTime
-        endTimeCalendar.setTimeInMillis(startTimeCalendar.getTimeInMillis() + SIX_HOURS_IN_MILLISECONDS);
+        if (moveOneHour) {
+            // Add 1 hour to the remaining time, Times requires atleast 5 minutes per duration
+            timeToAdd += ONE_HOUR_IN_MILLISECONDS;
+
+            // New end time for first DTO ist 5 hours after startTime if the remaining time is less than 5 minutes
+            endTimeCalendar.setTimeInMillis(startTimeCalendar.getTimeInMillis() + SIX_HOURS_IN_MILLISECONDS - ONE_HOUR_IN_MILLISECONDS);
+
+            System.out.println("As the leftover-time is less than 5 minutes, I moved an hour from the 6Hour-Entry to make TimesAndMore happy.");
+        }
+        else {
+            // New end time for first DTO ist 6 hours after startTime if the remaining time is more than 5 minutes
+            endTimeCalendar.setTimeInMillis(startTimeCalendar.getTimeInMillis() + SIX_HOURS_IN_MILLISECONDS);
+        }
 
         dto.setStartTime(startTimeCalendar.getTime());
         dto.setEndTime(endTimeCalendar.getTime());

@@ -5,6 +5,9 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 
 /**
+ * Helper-Class for Cellstyles from the template.
+ * Static values of the Index from specific Columns inside the Times-File.
+ *
  * Created by christian on 05.09.16.
  */
 public class CellStyleHelper {

@@ -6,6 +6,9 @@ import com.mayobirne.exceptions.InvalidInputException;
 import java.util.List;
 
 /**
+ * Providing methods for validation and creation of {@link ArgsDTO} and
+ * showing a Tutorial.
+ *
  * Created by christian on 26.08.16.
  */
 public interface ArgsService {
@@ -38,5 +41,8 @@ public interface ArgsService {
      */
     ArgsDTO setArgsDTO(List<String> args) throws InvalidInputException;
 
+    /**
+     * Shows a Tutorial for the Application
+     */
     void showHelpText();
 }

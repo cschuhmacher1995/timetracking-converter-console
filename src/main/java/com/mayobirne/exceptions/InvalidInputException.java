@@ -1,9 +1,9 @@
 package com.mayobirne.exceptions;
 
 /**
- * Created by christian on 26.08.16.
- *
  * Thrown in ArgsService to show custom Messages for wrong Arguments
+ *
+ * Created by christian on 26.08.16.
  */
 public class InvalidInputException extends Exception {
 

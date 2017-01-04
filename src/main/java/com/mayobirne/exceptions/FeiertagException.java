@@ -1,9 +1,9 @@
 package com.mayobirne.exceptions;
 
 /**
- * Created by christian on 03.09.16.
- *
  * Thrown in InterflexService to ignore empty rows
+ *
+ * Created by christian on 26.08.16.
  */
 public class FeiertagException extends Exception {
 

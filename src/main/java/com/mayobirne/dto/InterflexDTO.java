@@ -3,6 +3,8 @@ package com.mayobirne.dto;
 import java.util.Date;
 
 /**
+ * Infos from the Input-File.
+ *
  * Created by christian on 03.09.16.
  */
 public class InterflexDTO {

@@ -3,6 +3,8 @@ package com.mayobirne.dto;
 import org.apache.poi.ss.usermodel.CellStyle;
 
 /**
+ * Wrapper for all Cellstyles from the Times-File.
+ *
  * Created by Christian on 18.03.2016.
  */
 public class CellStylesDTO {

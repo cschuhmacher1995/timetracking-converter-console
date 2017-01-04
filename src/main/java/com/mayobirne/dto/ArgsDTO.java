@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Calendar;
 
 /**
+ * DTO for all supported Input-Parameters.
+ *
  * Created by christian on 11.09.16.
  */
 public class ArgsDTO {

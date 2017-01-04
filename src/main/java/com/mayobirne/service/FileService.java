@@ -8,6 +8,9 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 /**
+ * Providing the initialisation of a new Excel-File and
+ * finding already converted Times-Excels.
+ *
  * Created by christian on 05.09.16.
  */
 public interface FileService {
@@ -21,5 +24,12 @@ public interface FileService {
      */
     File generateNewExcelFile(ArgsDTO argsDTO) throws URISyntaxException, IOException;
 
+    /**
+     * Finds all already converted Excel-Files with Times-Info
+     * at the set Output-Directory.
+     *
+     * @param argsDTO the Input-Arguments
+     * @return an ArrayList of all found Files
+     */
     List<File> getExistingConvertedFiles(ArgsDTO argsDTO);
 }
