@@ -20,7 +20,8 @@ public interface TimesService {
 
     // The default Project Number for PVA / e-PV
     // Changed at 2017-01-01. Old value = 862355
-    Integer PVA_PROJECT_NR = 220091;
+    // Changed at 2017-07-01. Old value = 220091
+    Integer PVA_PROJECT_NR = 906715;
 
     // The Category-Number for Software-Development
     Integer SOFTWARE_DEVELOPMENT_CATEGORY = 2;
