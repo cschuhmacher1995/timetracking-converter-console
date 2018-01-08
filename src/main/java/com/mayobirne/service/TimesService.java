@@ -18,10 +18,12 @@ import java.util.List;
  */
 public interface TimesService {
 
+    // TODO Support as Input-Parameter
     // The default Project Number for PVA / e-PV
     // Changed at 2017-01-01. Old value = 862355
     // Changed at 2017-07-01. Old value = 220091
-    Integer PVA_PROJECT_NR = 906715;
+    // Changed at 2017-01-01. Old value = 906715
+    Integer PVA_PROJECT_NR = 330934;
 
     // The Category-Number for Software-Development
     Integer SOFTWARE_DEVELOPMENT_CATEGORY = 2;
